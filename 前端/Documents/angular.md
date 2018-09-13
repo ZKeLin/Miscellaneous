@@ -319,6 +319,142 @@ Scope.prototype.$eval = function (exp) {
 };
 ```
 
+$watch函数主要是将要监视的表达式推入到$$watchers数组里面，$new函数主要是生成一个具有唯一id的scope对象，并将该scope对象推入到$$children数组里面，$destroy函数主要是销毁scope对象的，即从$$children数组将其删除，$digest是进行脏检查的主要函数，它会循环遍历$$watchers数组，将数组里面的每一个watch的对象进行逻辑操作，获取当前表达式的值，并与上一个表达式的值进行比较，如果两者不一样则认为该表达式的值是脏数据，将当前的值传递给相应的函数(即在定义watcher的时候附给fn的函数)，然后递归遍历所有的$$children里的scope对象并且调用当前自身的$digest,已达到监查所有的要监查的表达式。在$evel函数里面我们检查表达式是否为函数，如果是函数则直接执行他，并将当前的作用域上下文传递给该表达式，并将该表达式返回的值返回出去，否则我们通过with将他的作用对象改为当前的作用域的对象，并且运用eval函数执行他（在这里with和eval函数都不是安全的函数，虽然很强大但是非常不建议使用），在这里他可以执行类似于 foo + bar * baz() 表达式或者是更复杂的表达式，并将返回值返回出去。
+
+下面看一下watcher的用法:
+
+```javascript
+function Controller($scope) {
+  $scope.i = $scope.j = 0;
+  $scope.$watch('i', function (val) {
+    $scope.j += 1;
+  });
+  $scope.$watch('j', function (val) {
+    $scope.i += 1;
+  });
+  $scope.i += 1;
+  $scope.$digest();
+}
+```
+
+在这里Controller里面的，$watch会监视i和j，在这个函数执行时他会把当前i和j的表达式的值保存在last属性里面，并保存要执行的函数并赋值给fn属性，可以看上面的代码就会明白，当执行$digest的时候进行数据比较已达到更新值的作用(在这里开销是比较大的，会递归循环每一个scope)。
+
+下面定义几个默认的指令：
+
+#### Directives
+
+到目前为止，有上面那些代码还不足以能够干什么，为了让能够运行起来需要实现几个默认的指令和服务
+
+##### ngl-bind
+
+```javascript
+Provider.directive('ngl-bind', function () {
+  return {
+    scope: false,
+    link: function (el, scope, exp) {
+      el.innerHTML = scope.$eval(exp);
+      scope.$watch(exp, function (val) {
+        el.innerHTML = val;
+      });
+    }
+  };
+});
+```
+
+ngl-bind不需要新的scope对象，它仅仅对当前节点添加了一个监控。当脏检测发现有了改变，回调函数就会把新的值赋值到innerHTML更新dom。
+
+##### ngl-model
+
+```javascript
+Provider.directive('ngl-model', function () {
+  return {
+    link:  function (el, scope, exp) {
+      el.onkeyup = function () {
+        scope[exp] = el.value;
+        scope.$digest();
+      };
+      scope.$watch(exp, function (val) {
+        el.value = val;
+      });
+    }
+  };
+});
+```
+
+在这里我们对input元素添加了一个onkeyup监听，如果出发keyup，则调用当前的scope执行$digest脏检查循环，这样就会保证这个变化会应用到所有的监视表达式中。
+
+##### ngl-controller
+
+```javascript
+Provider.directive('ngl-controller', function () {
+  return {
+    scope: true,
+    link: function (el, scope, exp) {
+      var ctrl = Provider.get(exp + Provider.CONTROLLERS_SUFFIX);
+      Provider.invoke(ctrl, { $scope: scope });
+    }
+  };
+});
+```
+
+对于每一个Controller我们都需要一个新的scope，所以这里的 scope: true,这里是AngularJS有魔力的地方之一，这里我们通过Provider.get()获取一个我们需要的Controller，并且调用他并且把scope传递给他，在这我们可以scope里面添加属性。也可以通过ngl-bind/ngl-model绑定这些属性，一旦我们改变了属性值我们需要确保我们执行$digest脏检测来保证监控这些属性的表达式会执行。
+
+##### ngl-click
+
+```javascript
+Provider.directive('ngl-click', function () {
+  return {
+    scope: false,
+    link: function (el, scope, exp) {
+      el.onclick = function () {
+        scope.$eval(exp);
+        scope.$digest();
+      };
+    }
+  };
+});
+```
+
+在这里我们需要计算表达式并且执行$digest循环，一旦用户点击了按钮
 
 
+###### 万事俱备
+
+为了理解数据绑定是怎么执行的列了一下的例子：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body ngl-controller="MainCtrl">
+  <span ngl-bind="bar"></span>
+  <button ngl-click="foo()">Increment</button>
+</body>
+</html>
+```
+```javascript
+Provider.controller('MainCtrl', function ($scope) {
+  $scope.bar = 0;
+  $scope.foo = function () {
+    $scope.bar += 1;
+  };
+});
+```
+
+下面这个图表明都干什么
+
+<img src="https://blog.mgechev.com/images/lightweight-ng/lifecycle-overview.png" width="400" height="300" />
+
+首先DOMCompiler会先发现我们的ngl-controller指令。然后会调用这个指令的link函数生成一个新的scope对象传递给controller的执行函数。我们增加了一个值为0的bar属性，还有一个叫做foo的方法，foo方法会不断增加bar。DOMCompiler会发现ngl-bind然后为bar添加监控。并且还发现了ngl-click同时添加click事件到按钮上。
+
+一旦用户点击了按钮，foo函数就会通过$scope.$eval执行。使用的scope对象就是传递给MainCtrl的scope对象。这之后ngl-click会执行脏检测$scope.$digest。脏检测循环会遍历所有的监控表达式，发现bar的值变化了。因为我们添加了对应的回调函数，所以就执行它更新span的内容。
+
+#### 结论
+
+在这里实现一下功能
+
+* 双向数据绑定
+* 依赖注入
+* 作用域分离
 
