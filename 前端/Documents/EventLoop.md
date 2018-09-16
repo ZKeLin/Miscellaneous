@@ -82,16 +82,16 @@ second
 所有环境的共同点是都会有一个Event Loop的内置机制，每一次调用JS引擎的时候，他会解决你的程序中多个块的执行，随着时间的推移，也就是说JS引擎对于任何JS代码来说仅仅只是按需执行的环境。  
 当你的JavaScript程序要去服务端请求一些数据时候，你需要建立一个“response”代码(也就是回调函数)，JS引擎会告诉宿主环境：“嘿，我现在要挂起执行，但是当网络请求完成了并且你有一些数据了，一定要执行这个函数作为回应”。浏览器然后会建立监听作为回应，当有东西返回回来了，浏览器通过把他插入到Callback Queue来安排回调函数去执行。如下图
 
-<img src="https://cdn-images-1.medium.com/max/1600/1*FA9NGxNB6-v1oI2qGEtlRQ.png" width="400" height="300" />
+<img src="https://cdn-images-1.medium.com/max/1600/1*FA9NGxNB6-v1oI2qGEtlRQ.png" width="500" height="300" />
 
 该图中的Web APIs是什么？实际上，他是一个你无法操纵的线程，你可以只调用他们，他们是并发启动浏览器的一部分。如果你是Nodejs，那么这些就是C++ API。  
 那么究竟什么事Event Loop？  
 
-<img src="https://cdn-images-1.medium.com/max/1600/1*KGBiAxjeD9JT2j6KDo0zUg.png" width="400" height="100" />
+<img src="https://cdn-images-1.medium.com/max/1600/1*KGBiAxjeD9JT2j6KDo0zUg.png" width="400" height="150" />
 
 Event Loop有一个简单工作就是去监控Call Stack和CallBack Queue。如果Call Stack是空的，他会从CallBack Queue获取第一个事件，并且把他推到Call Stack里面。
 
-这种迭代在事件循环中成为刻度。每个事件只是一个函数回调。
+这种迭代在事件循环中称为tick。每个事件只是一个函数回调。
 下面让我们看一个具体的例子：
 
 ```javascript
@@ -108,97 +108,97 @@ console.log('Bye');
     
     #### 1/16
     
-    <img src="https://cdn-images-1.medium.com/max/1600/1*9fbOuFXJHwhqa6ToCc_v2A.png" width="400" height="200" />
+    <img src="https://cdn-images-1.medium.com/max/1600/1*9fbOuFXJHwhqa6ToCc_v2A.png" width="400" height="250" />
 
 2. console.log('Hi') 被推进了Call Stack
 
     #### 2/16
     
-    <img src="https://cdn-images-1.medium.com/max/1600/1*dvrghQCVQIZOfNC27Jrtlw.png" width="400" height="200" />
+    <img src="https://cdn-images-1.medium.com/max/1600/1*dvrghQCVQIZOfNC27Jrtlw.png" width="400" height="250" />
 
 3. console.log('Hi') 被执行
 
     #### 3/16
     
-    <img src="https://cdn-images-1.medium.com/max/1600/1*yn9Y4PXNP8XTz6mtCAzDZQ.png" width="400" height="200" />
+    <img src="https://cdn-images-1.medium.com/max/1600/1*yn9Y4PXNP8XTz6mtCAzDZQ.png" width="400" height="250" />
 
 4. console.log('Hi') 被推出
 
     #### 4/16
     
-    <img src="https://cdn-images-1.medium.com/max/1600/1*iBedryNbqtixYTKviPC1tA.png" width="400" height="200" />
+    <img src="https://cdn-images-1.medium.com/max/1600/1*iBedryNbqtixYTKviPC1tA.png" width="400" height="250" />
 
 5. setTimeout(function cb1(){ ... }) 被推到Call Stack
 
     #### 5/16
     
-    <img src="https://cdn-images-1.medium.com/max/1600/1*HIn-BxIP38X6mF_65snMKg.png" width="400" height="200" />
+    <img src="https://cdn-images-1.medium.com/max/1600/1*HIn-BxIP38X6mF_65snMKg.png" width="400" height="250" />
 
 6. setTimeout(...) 被执行。浏览器会在Web APIs里面创建一个，并且会执行计时。
 
     #### 6/16
     
-    <img src="https://cdn-images-1.medium.com/max/1600/1*vd3X2O_qRfqaEpW4AfZM4w.png" width="400" height="200" />
+    <img src="https://cdn-images-1.medium.com/max/1600/1*vd3X2O_qRfqaEpW4AfZM4w.png" width="400" height="250" />
 
 7. setTimeout(function cb1(){ ... }) 调用完成并且从Call Stack里面推出。
 
     #### 7/16
 
-    <img src="https://cdn-images-1.medium.com/max/1600/1*_nYLhoZPKD_HPhpJtQeErA.png" width="400" height="200" />
+    <img src="https://cdn-images-1.medium.com/max/1600/1*_nYLhoZPKD_HPhpJtQeErA.png" width="400" height="250" />
 
 8. console.log('Bye') 被推到Call Stack
 
     #### 8/16
     
-    <img src="https://cdn-images-1.medium.com/max/1600/1*1NAeDnEv6DWFewX_C-L8mg.png" width="400" height="200" />
+    <img src="https://cdn-images-1.medium.com/max/1600/1*1NAeDnEv6DWFewX_C-L8mg.png" width="400" height="250" />
 
 9. console.log('Bye') 被执行
 
     #### 9/16
     
-    <img src="https://cdn-images-1.medium.com/max/1600/1*UwtM7DmK1BmlBOUUYEopGQ.png" width="400" height="200" />
+    <img src="https://cdn-images-1.medium.com/max/1600/1*UwtM7DmK1BmlBOUUYEopGQ.png" width="400" height="250" />
 
 10. console.log('Bye') 从Call Stack 推出
 
     #### 10/16
 
-    <img src="https://cdn-images-1.medium.com/max/1600/1*-vHNuJsJVXvqq5dLHPt7cQ.png" width="400" height="200" />
+    <img src="https://cdn-images-1.medium.com/max/1600/1*-vHNuJsJVXvqq5dLHPt7cQ.png" width="400" height="250" />
 
 11. 过了5000ms之后，定时器也完成了并且会把cb1回调函数，推到Callback Queue中。
 
     #### 11/16
     
-    <img src="https://cdn-images-1.medium.com/max/1600/1*eOj6NVwGI2N78onh6CuCbA.png" width="400" height="200" />
+    <img src="https://cdn-images-1.medium.com/max/1600/1*eOj6NVwGI2N78onh6CuCbA.png" width="400" height="250" />
 
 12. Event Loop会检查Call Stack是否为空，如果不为空它会等到Call Stack里面的栈帧全部都执行完成并且都推出Call Stack，将cb1从Callback Queue推到Call Stack。
 
     #### 12/16
     
-    <img src="https://cdn-images-1.medium.com/max/1600/1*jQMQ9BEKPycs2wFC233aNg.png" width="400" height="200" />
+    <img src="https://cdn-images-1.medium.com/max/1600/1*jQMQ9BEKPycs2wFC233aNg.png" width="400" height="250" />
 
 13. cb1 被执行，并且会把console.log('cb1') 推入栈顶。
 
     #### 13/16
     
-    <img src="https://cdn-images-1.medium.com/max/1600/1*hpyVeL1zsaeHaqS7mU4Qfw.png" width="400" height="200" />
+    <img src="https://cdn-images-1.medium.com/max/1600/1*hpyVeL1zsaeHaqS7mU4Qfw.png" width="400" height="250" />
 
 14. console.log('cb1') 被执行
 
     #### 14/16
     
-    <img src="https://cdn-images-1.medium.com/max/1600/1*lvOtCg75ObmUTOxIS6anEQ.png" width="400" height="200" />
+    <img src="https://cdn-images-1.medium.com/max/1600/1*lvOtCg75ObmUTOxIS6anEQ.png" width="400" height="250" />
 
 15. console.log('cb1') 从Call Stack推出
 
     #### 15/16
 
-    <img src="https://cdn-images-1.medium.com/max/1600/1*Jyyot22aRkKMF3LN1bgE-w.png" width="400" height="200" />
+    <img src="https://cdn-images-1.medium.com/max/1600/1*Jyyot22aRkKMF3LN1bgE-w.png" width="400" height="250" />
 
 16. cb1 执行完成，从Call Stack推出
 
     #### 16/16
 
-    <img src="https://cdn-images-1.medium.com/max/1600/1*t2Btfb_tBbBxTvyVgKX0Qg.png" width="400" height="200" />
+    <img src="https://cdn-images-1.medium.com/max/1600/1*t2Btfb_tBbBxTvyVgKX0Qg.png" width="400" height="250" />
 
 以上就是
 ```javascript
