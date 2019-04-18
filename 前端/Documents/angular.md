@@ -452,7 +452,7 @@ Provider.controller('MainCtrl', function ($scope) {
 
 #### 结论
 
-在这里实现一下功能
+在这里实现以下功能
 
 * 双向数据绑定
 * 依赖注入
