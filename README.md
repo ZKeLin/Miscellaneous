@@ -2,7 +2,7 @@
 
 #### Algorithm
 
-* [跳表](./Algorithm/skip-list.md)
+* [跳表](./Algorithm/Documents/skip-list.md)
 
 #### 计算机网略
 
