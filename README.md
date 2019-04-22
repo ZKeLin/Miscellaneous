@@ -4,7 +4,7 @@
 
 * [跳表](./Algorithm/Documents/skip-list.md)
 
-#### 计算机网略
+#### 计算机网络
 
 * [TCP](./计算机网络/Documents/TCP.md)
 
