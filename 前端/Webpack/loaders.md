@@ -9,7 +9,7 @@
 
 ```bash
 #通过安装babel的相关模块来支持babel-loader
-npm i @babel/core @babel/preset-env babel-loader -D
+npm i @babel/core @babel/preset-env @babel/preset-react babel-loader -D
 ```
 
 ```json
