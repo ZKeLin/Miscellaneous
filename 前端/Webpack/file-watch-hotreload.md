@@ -101,10 +101,10 @@
   5. bundle.js: 构建输出的文件
 
   如下图:
-  <img src='../images/hot-reload.png' alt='图片来自极客时间'>
+  <img src='../Images/hot-reload.png' alt='图片来自极客时间'>
 
   启动阶段:
-  当WDS第一次启动的时候，webpack进行编译，将一些文件转换然后打包，打包成功以后传输给Bundle Server，Bundle Server会自动开启浏览器(如果开启)访问http://localhost:8080(默认端口)，然后浏览器访问该服务，等待服务器bundle完成以后，会下载bundle.js到客户端，在启动Bundle Server的同时开启websocket服务，也就是HMR Server,通过HMR Server来和浏览器进行信息交互,客户端会与服务端进行一个socket连接，来接受服务端socket发送的信息，通过服务端发送的指定消息来做相应的处理。
+  当WDS第一次启动的时候，webpack进行编译，将一些文件转换然后打包，打包成功以后传输给Bundle Server，Bundle Server会自动开启浏览器(如果开启)访问`http://localhost:8080`(默认端口)，然后浏览器访问该服务，等待服务器bundle完成以后，会下载bundle.js到客户端，在启动Bundle Server的同时开启websocket服务，也就是HMR Server,通过HMR Server来和浏览器进行信息交互,客户端会与服务端进行一个socket连接，来接受服务端socket发送的信息，通过服务端发送的指定消息来做相应的处理。
 
   文件变动:
   如果文件变动了(通过webpack watch检测到)，然后重新bundle，WDS检测到wabpack bundle完成，并且文件发生变化，通过web socket发送消息给浏览器，浏览器会重新reload文件到本地，实现实时更新。
