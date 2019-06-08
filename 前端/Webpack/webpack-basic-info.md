@@ -49,6 +49,7 @@ module.exports = {
 webpack开箱即用只支持js和json两种文件类型，通过loaders去支持其他的文件类型并且把他们转化为有效的模块，并且可以添加到依赖图中。`loaders本身是一个函数，接受源文件作为参数，返回转换的结果`。  
 
 常用的loaders:
+
 | 名称 | 描述 |
 | ---- | ---- |
 | babel-loader | 转换ES6，ES7等js新特性 |
