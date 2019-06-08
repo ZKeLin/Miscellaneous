@@ -112,7 +112,8 @@ module.exports = {
 Mode是用来指定当前的构建环境：production,development还是none，  
 设置mode还可以使用webpack内置的函数，默认值为production。（webpack 4.0才有的概念）
 
-设置不同的mode开启的函数；
+设置不同的mode开启的函数:
+
 | 选项 | 描述 |
 | ---- | ---- |
 | development | 设置`process.env.MODE`的值为`development`，并开启`NamedChunksPlugin`和`NamedModulePlugin`。 |
