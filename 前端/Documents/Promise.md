@@ -52,6 +52,14 @@ promise的then方法接受两个参数
 执行订阅的回调函数( onFullfillment或者onRejection )，并将当前promise._result通过参数传递给回调函数。
 否则则生成一个child的promsie对象并将then方法的回调函数的返回值传递给parent的_result值，并返回child对象。  
 
+`
+Promise 实现的大体思路是在内部定义一个状态，该状态有三个值，并且状态值之间是有方向的，如果外部传入的异步函数有结果了，则通过调用Promise 提供的fulFill或reject函数，去通知promise 改变状态，并将结果通过then/catch的方式返回回来。
+`
+
+`
+Promise内部会维护一个订阅Array(_subscribers),用来处理传入then的回调，当内部state由 PENDDING 变为其他状态的时候会去触发当前回调并将result/reason当作参数传入到回调函数中。
+`
+
 [参考](https://github.com/stefanpenner/es6-promise)
 
 ```javascript
@@ -67,13 +75,14 @@ const State = {
 class Promise {
 
   constructor(resolver) {
-    this._result = this._state = undefined;
+    this._result = undefined;
+    this._state = State.PENDING;
     this._subscribers = [];
 
     typeof resolver !== 'function' && throw new TypeError('You must pass a resolver function as the first argument to the promise constructor');
     this instanceof Promise ? 
     initializePromise(this, resolver) : 
-    throw new TypeError('Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.')
+    throw new TypeError(`Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.`)
   }
 
 
@@ -93,6 +102,10 @@ class Promise {
     return promise.then(callback, callback);
   }
 
+  /**
+    *
+    * then方法会重新返回一个Promise，并将当前传入then的onFullfillment/onRejection函数返回的值传入到新的Promise的result中，这样后面调用then就可以获取到前面then返回的结果了
+    */
   then(onFullfillment, onRejection) {
     const parent = this;
 
@@ -104,7 +117,7 @@ class Promise {
 
     const { _state } = parent;
 
-    if (_state) {
+    if (_state !== State.PENDING) {
       const callback = arguments[_state - 1];
       
       setTimeout(() => {
@@ -131,6 +144,7 @@ Promise.reject = function Reject(reason) {
   return promise;
 };
 
+// 将resolve/reject传入到回调参数中
 function initializePromise(promise, resolver) {
   try{
     resolver(
@@ -171,7 +185,7 @@ function resolve(promise, value) {
     }
   }
 }
-
+// 执行订阅的_subscribers数组
 function fulfill(promise, value) {
   if (promise._state !== PENDING) { return; }
 
@@ -277,7 +291,7 @@ function invokeCallback(settled, promise, callback, detail) {
 
 ###### all函数   
 
-`Promise.all(iterable)`来处理并行操作，参数接受一个可迭代的对象（数组），返回一个Promise，该方法只有所有的对象都成功的时候才会触发成功，一旦任何一个对象失败或者是抛出异常，则会立即触发promise的reject方法，并且把第一个触发失败的promise对象信息作为它的失败错误信息，一般用来处理多个并发请求
+`Promise.all(iterable)`来处理并行操作，参数接受一个可迭代的对象（数组），返回一个Promise，该方法只有所有的对象都成功的时候才会触发成功，一旦任何一个对象失败或者是抛出异常，则会立即触发promise的reject方法，并且把第一个触发失败的promise对象信息作为它的失败错误信息，一般用来处理多个并发请求。Promise.all执行的思路是内部维护一个_remaining变量, 当数组中的某一个Promise状态改变了_remaining会减1，当_remaining == 0的时候表明所有的promise已经执行完成，将结果给到内部的promise对象的result结果
 
 ```javascript
 
@@ -318,6 +332,12 @@ Promise.all = function (entries) {
       error = e;
     }
 
+    if (didError) {
+      reject(promise, error);
+    } else {
+      handleMaybeThenable(promise, entry, then);
+    }
+    this._willSettleAt(promise, i);
 
   }
 
