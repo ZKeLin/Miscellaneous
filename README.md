@@ -21,7 +21,8 @@
 
 * JS
     - [var,let,const](./前端/Documents/js/var-let-const-and-hositing-scope.md)
-    - [How Event Loop works](./前端/js/Documents/event-loop.md)
+    - [How Event Loop works](./前端/Documents/js/event-loop.md)
+    - [Promise](./前端/Documents/js/promise.md)
 * 前端框架
     - [实现一个小型的angular](./前端/框架工具相关/Documents/angular.md)
 * Webpack  
