@@ -47,10 +47,12 @@ promise的then方法接受两个参数
 
 ##### implementation(简易版)  
 
-主要是publish，subscrib两个函数。充分运用订阅发布模式。
+promise的流程如下图:
+<img src="../../Images/promises.png">
+
+主要是publish，subscribe两个函数。充分运用订阅发布模式。
 如果promise的状态为FULFILLED或者是REJECTED状态，则直接调用publish函数，
-执行订阅的回调函数( onFullfillment或者onRejection )，并将当前promise._result通过参数传递给回调函数。
-否则则生成一个child的promsie对象并将then方法的回调函数的返回值传递给parent的_result值，并返回child对象。  
+执行订阅的回调函数( onFullfillment或者onRejection )，并将当前promise._result通过参数传递给回调函数。否则则生成一个child的promsie对象并将then方法的回调函数的返回值传递给parent的_result值，并返回child对象。  
 
 `
 Promise 实现的大体思路是在内部定义一个状态，该状态有三个值，并且状态值之间是有方向的，如果外部传入的异步函数有结果了，则通过调用Promise 提供的fulFill或reject函数，去通知promise 改变状态，并将结果通过then/catch的方式返回回来。

@@ -12,7 +12,7 @@ TCP是计算机网络中五层协议中的传输层，介于网络层和应用�
 
 ## TCP报文段的首部格式
 
-<img src='../Images/TCP_header.png'>
+<img src='../Images/tcp/TCP_header.png'>
 
 ## TCP的连接
 
@@ -21,7 +21,7 @@ TCP连接的端点是个很抽象的套接字，即IP地址:端口号，例如: 
 - #### TCP的连接管理 - 3次握手
   
   TCP三次握手示意图:  
-  <img src='../Images/three_hands.jpeg'>
+  <img src='../Images/tcp/three_hands.jpeg'>
 
   A是客户端，B是服务端，最初两端的TCP进程都处于CLOSE状态，连接建立开始是A主动发起连接，B被动打开连接。  
 
@@ -30,7 +30,7 @@ TCP连接的端点是个很抽象的套接字，即IP地址:端口号，例如: 
   3. 客户端A收到服务端B发送过来的确认请求后，还要在向服务端B再次发送确认。确认报文段中的ACK = 1，确认号ack = y + 1,而自己的序号seq = x + 1，而此时客户端A处于ESTABLISHED状态，服务端B收到该确认报文后也处于ESTABLISHED。  
   至此，TCP三次握手结束，正式进入连接状态。如下图:  
   
-  <img src='../Images/sanciwoshou.png' />
+  <img src='../Images/tcp/sanciwoshou.png' />
 
   注意: 为什么客户端A还要进行第三次握手确认？  
   这里主要防止已失效的连接请求突然又传送给服务端B，导致服务端B持续等待，浪费资源。
@@ -43,9 +43,9 @@ TCP连接的可靠是指: 无差错，不丢失，不重复并且按序到达。
 
   #### `滑动窗口`
 
-  <img src='../Images/huadongchuangkou1.jpeg' />  
+  <img src='../Images/tcp/huadongchuangkou1.jpeg' />  
 
-  <img src='../Images/huadongchuangkou2.png' />
+  <img src='../Images/tcp/huadongchuangkou2.png' />
 
   #### `超时重传`
 
@@ -59,7 +59,7 @@ TCP连接的可靠是指: 无差错，不丢失，不重复并且按序到达。
 
   刚开始的窗口大小是在TCP建立连接的时候协商的，到后面随着数据开始发送到服务端，或者是服务端发送数据到客户端，都会有一个win的字段指明自己所能接受的窗口大小，对方发送的窗口大小就不会超过该窗口大小(窗口大小的单位是字节而不是报文段),如下图:  
 
-  <img src='../Images/liuliangkongzhi_chuangkou.png' />
+  <img src='../Images/tcp/liuliangkongzhi_chuangkou.png' />
 
 - ### TCP的拥塞控制
 
@@ -79,7 +79,7 @@ TCP连接的可靠是指: 无差错，不丢失，不重复并且按序到达。
 
   还有一个策略是: 不管当前处在慢开始阶段还是拥塞避免阶段，只要网络出现拥塞(发送方没有按时收到接收方的确认)，就要把慢开始门限设置为出现拥塞时的发送窗口值的一半，但是不能小于2。然后把拥塞窗口重新设置为1，重新执行慢开始和拥塞避免算法。 如下图:  
 
-  <img src='../Images/mankaishi.png' />
+  <img src='../Images/tcp/mankaishi.png' />
   
   #### `快重传和快恢复`
 
@@ -91,7 +91,7 @@ TCP连接的可靠是指: 无差错，不丢失，不重复并且按序到达。
 
   如下图: 
 
-  <img src='../Images/kuaihuifu.jpeg'>  
+  <img src='../Images/tcp/kuaihuifu.jpeg'>  
 
 ## TCP断开连接
 
@@ -108,7 +108,7 @@ TCP连接的可靠是指: 无差错，不丢失，不重复并且按序到达。
 6. 服务器只要收到了客户端发送的确认，立即进入CLOSED状态。同样，撤销TCB后，就结束了这次TCP的连接。可以看到，客户端结束TCP的时间要比服务端结束的时间要长。  
 
   如下图整个过程:  
-  <img src="../Images/sicihuishou.png">
+  <img src="../Images/tcp/sicihuishou.png">
 
   #### 说明
 
