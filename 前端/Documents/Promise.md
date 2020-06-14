@@ -372,3 +372,26 @@ Promise.all = function (entries) {
 }
 
 ```
+
+###### race函数
+
+`Promise.race` 比较简单，参数和Promise.all接受的参数一样是一个Promise数组，作用是数组中的元素谁先返回结果则使用谁的值。
+
+```javascript
+Promise.race = function (entries) {
+  var Constructor = this;
+
+  if (!isArray(entries)) {
+    return new Constructor(function (_, reject) {
+      return reject(new TypeError('You must pass an array to race.'));
+    });
+  } else {
+    return new Constructor(function (resolve, reject) {
+      var length = entries.length;
+      for (var i = 0; i < length; i++) {
+        Constructor.resolve(entries[i]).then(resolve, reject);
+      }
+    });
+  }
+}
+```
