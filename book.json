@@ -1,0 +1,8 @@
+{
+  "title" : "一些总结，通过看书,看文档或者阅读技术博客",
+  "theme-default": {
+    "showLevel": true
+  },
+  "language": "fr",
+  "plugins": ["summary", "toggle-chapters", "theme-comscore"]
+}
