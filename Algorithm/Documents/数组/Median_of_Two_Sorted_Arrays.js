@@ -26,9 +26,9 @@ const findMedianFromTwoSortedArray = function (nums1, nums2) {
             console.log(i, j);
         
             let leftMax = 0;
-            if(i == 0){
+            if(i === 0){
                 leftMax = nums2[j - 1];
-            }else if(j == 0){
+            }else if(j === 0){
                 leftMax = nums1[i - 1];
             }else{
                 leftMax = Math.max(nums2[j - 1],nums1[i - 1])
