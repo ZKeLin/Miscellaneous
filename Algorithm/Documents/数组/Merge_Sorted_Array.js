@@ -13,7 +13,7 @@ const merge = function (nums1, m, nums2, n) {
       nums1[len] = nums2[n--];
     }
   }
-}
+};
 
 let nums1 = [1,2,3,0,0,0], m = 3;
 let nums2 = [2,5,6],       n = 3;
