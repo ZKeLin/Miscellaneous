@@ -381,7 +381,7 @@ Promise.all = function (entries) {
 
 ```javascript
 Promise.race = function (entries) {
-  var Constructor = this;
+  let Constructor = this;
 
   if (!isArray(entries)) {
     return new Constructor(function (_, reject) {
@@ -389,8 +389,8 @@ Promise.race = function (entries) {
     });
   } else {
     return new Constructor(function (resolve, reject) {
-      var length = entries.length;
-      for (var i = 0; i < length; i++) {
+      let length = entries.length;
+      for (let i = 0; i < length; i++) {
         Constructor.resolve(entries[i]).then(resolve, reject);
       }
     });
