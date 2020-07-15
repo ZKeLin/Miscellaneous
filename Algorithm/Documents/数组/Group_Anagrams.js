@@ -20,11 +20,19 @@ function GroupAnagram(strs) {
 
 
 
-// 方法二：将每个单词中的字母asc码相加，值相同的则为同一组。
+// 方法二：将每个单词中的字母asc码对应在数组的位置加一，数组中的值全部相同的则为同一组。
 function GroupAnagram2(strs) {
   let map = new Map();
   for(let value of strs) {
-    let totalCode = value.split('').reduce((pre, cur) => { return pre + cur.charCodeAt(); }, 0);
+    let arr = new Array(26);
+    for (let i = 0; i < arr.length; i++) {
+      arr[i] = 0;
+    }
+    value.split('').forEach(it => {
+      arr[it.charCodeAt() - 'a'.charCodeAt()]++;
+    });
+    let totalCode = arr.reduce((pre, cur) => { pre = "" + pre + cur; return pre; }, '');
+    console.log(totalCode);
     if(!map.has(totalCode)) map.set(totalCode, []);
     map.get(totalCode).push(value);
   }
@@ -35,4 +43,4 @@ function GroupAnagram2(strs) {
   return results;
 }
 
-GroupAnagram2(["eat", "tea", "tan", "ate", "nat", "bat"]);
+console.log(GroupAnagram2(["cab", "tin", "pew", "duh", "may", "ill", "buy", "bar", "max", "doc"]));
