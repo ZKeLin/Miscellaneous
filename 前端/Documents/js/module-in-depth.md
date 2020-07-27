@@ -202,6 +202,84 @@ define(function (require, exports, module) {
 
 ### CommonJS模块系统
 
+CommonJS规范为代表的就是node js的模块依赖系统。  
+在node中一个文件就是一个模块，有自己的作用域，在这个文件中除了导出的变量其他的变量，函数等等都是私有的，对其他文件是不可见的。其实就是有一个大函数包裹这这个文件里面的内容，该函数有三个参数
+```javascript
+function (require, exports, module, __filename, __dirname) {
+  let a = 5;
+  const addX = function(x) {
+    return a + x;
+  };
+
+  module.exports.addX = addX;
+}
+```
+而对于我们在引用模块和使用的时候 `function (require, exports, module, __filename, __dirname){}` 是不可见的。node在处理该文件的时候默认会给添加该函数，这样我们才可以使用里面的require，exports和module三个变量。  
+而exports == module.exports, 是为了我们方便使用导出功能特意将exports指向了module.exports, 所以exports不能随便覆盖不然会将exports的指向改掉。  
+module是一个对象里边包含了一下成员变量
+```javascript
+Module = {
+  id: '.',
+  exports: { addX: [Function] },
+  parent: null,
+  filename:
+   '/Users/userName/Documents/我的学习/前端/Documents/js/code/commonjs.js',
+  loaded: false,
+  children: [],
+  paths:
+   [ '/Users/userName/Documents/我的学习/前端/Documents/js/code/node_modules',
+     '/Users/userName/Documents/我的学习/前端/Documents/js/node_modules',
+     '/Users/userName/Documents/我的学习/前端/Documents/node_modules',
+     '/Users/userName/Documents/我的学习/前端/node_modules',
+     '/Users/userName/Documents/我的学习/node_modules',
+     '/Users/userName/Documents/node_modules',
+     '/Users/userName/node_modules',
+     '/Users/node_modules',
+     '/node_modules' ] }
+```
+
+##### 模块的加载机制
+
+CommonJS的模块加载机制输入的是值(不包括对象)的拷贝，也就是是说导出的值是多少使用时就是多少，模块内部的变化就影响不到该值了。例如
+```javascript
+// common.js
+let b = 5;
+
+exports.b = b;
+
+exports.addB = function() {
+  b++;
+};
+```
+```javascript
+let { b, addB } = require('./commonjs');
+console.log(b); //5
+addB();
+console.log(b); //5
+```
+如果是对象
+```javascript
+// commonjs.js
+const a = {
+  x: 5
+};
+
+exports.add = function () {
+  return a.x++;
+};
+
+exports.a = a;
+```
+```javascript
+let { add, a } = require('./commonjs');
+
+console.log(a); // { x: 5 }
+add();
+console.log(a); // { x: 6 }
+```
+
+#### require的内部处理流程
+
 
 
 参考:  
