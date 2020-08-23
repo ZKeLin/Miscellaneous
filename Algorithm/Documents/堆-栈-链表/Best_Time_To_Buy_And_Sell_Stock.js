@@ -1,21 +1,24 @@
+/**
+ * Best_Time_To_Buy_And_Sell_Stock_
+ * https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+ */
 
-function BuyAndSellStock(prices) {
-  let stack = [];
-  let i = 0;
-  let profit = 0;
+function maxProfit(prices) {
+  let i = 0, maxIndex = 0, minIndex = 0, maxProfit = 0;
   while(i < prices.length) {
-    if(stack.length > 0 && prices[i] < stack[stack.length - 1]) {
-      console.log(stack);
-      profit += stack[stack.length - 1] - stack[0];
-      stack = [];
+    if(prices[minIndex] > prices[i]){
+      minIndex = i;
+      maxIndex = i;
     }
-    stack.push(prices[i]);
+    if(prices[maxIndex] < prices[i] && i > minIndex){
+      maxIndex = i;
+    }
+    if(maxIndex > minIndex && prices[maxIndex] - prices[minIndex] > maxProfit){
+      maxProfit = prices[maxIndex] - prices[minIndex];
+    }
     i++;
   }
-  if(stack.length !== 0){
-    profit += stack[stack.length - 1] - stack[0];
-  }
-  return profit;
+  return maxProfit;
 }
 
-console.log(BuyAndSellStock([7,6,4,3,1]));
+console.log(maxProfit([7,1,5,3,6,4]));
