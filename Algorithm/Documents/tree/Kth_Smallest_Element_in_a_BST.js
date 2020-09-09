@@ -4,6 +4,13 @@
  */
 
 const TreeNode = require('./TreeNode');
+
+/**
+ * 通过深度优先遍历
+ * @param root
+ * @param k
+ * @return {*}
+ */
 function kthSmallestElement(root, k) {
   let sortedArr = getDFSArr(root, []);
   return sortedArr[k-1];
