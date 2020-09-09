@@ -6,7 +6,6 @@
 const TreeNode = require('./TreeNode');
 function kthSmallestElement(root, k) {
   let sortedArr = getDFSArr(root, []);
-  console.log(sortedArr);
   return sortedArr[k-1];
 }
 
