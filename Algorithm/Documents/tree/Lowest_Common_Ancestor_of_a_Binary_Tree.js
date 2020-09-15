@@ -33,6 +33,10 @@ function lowestCommonAncestor1(root, p, q) {
   return q;
 }
 
+function lowestCommonAncestor2(root, p, q) {
+
+}
+
 let p = new TreeNode(6, null);
 let q = new TreeNode(2, new TreeNode(7,null, null), new TreeNode(4, null, null));
 

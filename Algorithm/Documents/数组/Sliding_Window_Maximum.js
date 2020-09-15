@@ -26,5 +26,6 @@ function slidingWindowMax(nums, k) {
 
   return maxArr;
 }
+// todo 使用双向队列
 
 console.log(slidingWindowMax([1, -1], 1));
