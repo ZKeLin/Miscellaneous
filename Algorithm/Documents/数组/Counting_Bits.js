@@ -18,4 +18,4 @@ function countBits(num) {
 }
 
 
-console.log(countBits(5))
+console.log(countBits(5));

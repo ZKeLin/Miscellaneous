@@ -31,6 +31,7 @@ function quickSelect(list, left, right, k) {
 function partition(list, left, right, pivotIndex) {
   let pivotValue = list[pivotIndex];
   swap(list, pivotIndex, right);
+  console.log(list);
   let storeIndex = left;
   for (let i = left; i < right; i++) {
     if(list[i] > pivotValue){
