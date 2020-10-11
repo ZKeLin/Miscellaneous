@@ -8,7 +8,7 @@ const TreeNode = require('./TreeNode');
  *
  * @param {TreeNode} root
  */
-var serialize = function(root) {
+const serialize = function(root) {
   let stack = [];
   let container = [];
   root && stack.push(root) && container.push(root.val);
@@ -35,7 +35,7 @@ var serialize = function(root) {
  *
  * @param {string} data
  */
-var deserialize = function(data) {
+const deserialize = function(data) {
   let nodeList = data.split(',');
   if(nodeList.length === 0 || !data){
     return null;
@@ -64,5 +64,11 @@ var deserialize = function(data) {
 };
 
 let root = new TreeNode(1, new TreeNode(2, null, null), new TreeNode(3, new TreeNode(4, null, null), new TreeNode(5, null, null)))
-console.log(serialize(null));
-console.log(deserialize(''));
+console.log(serialize(root));
+// console.log(deserialize(''));
+
+
+module.exports = {
+  serialize,
+  deserialize
+};
