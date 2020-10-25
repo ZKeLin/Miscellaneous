@@ -14,7 +14,7 @@ function deleteDuplicates(head) {
       head.next = head.next.next;
       tempItem = null;
     }else{
-      tempValue = head.next.val
+      tempValue = head.next.val;
       head = head.next;
     }
   }
