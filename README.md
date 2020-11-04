@@ -3,7 +3,12 @@
 #### Algorithm
 
 * [数组](./Algorithm/Documents/数组)
-* [跳表](./Algorithm/Documents/skip-list.md)
+* [Tree](./Algorithm/Documents/tree)
+* [动态规划](./Algorithm/Documents/动态规划)
+* [回溯](./Algorithm/Documents/回溯)
+* [图](./Algorithm/Documents/图)
+* [堆栈链表](./Algorithm/Documents/堆-栈-链表)
+* [数组](./Algorithm/Documents/数组)
 
 #### 计算机网络
 
@@ -21,20 +26,20 @@
 #### 前端
 
 * JS
-    - [var,let,const](./前端/Documents/js/var-let-const-and-hositing-scope.md)
-    - [How Event Loop works](./前端/Documents/js/event-loop.md)
-    - [Promise](./前端/Documents/js/promise.md)
+    - [var,let,const](前端/Documents/js/Var_Let_Const_And_Hositing_Scope.md)
+    - [How Event Loop works](前端/Documents/js/Event_Loop.md)
+    - [Promise](前端/Documents/js/Ppromise.md)
 * 前端框架
-    - [实现一个小型的angular](./前端/框架工具相关/Documents/angular.md)
+    - [实现一个小型的angular](./前端/Documents/框架工具相关/angular.md)
 * Webpack  
-    - [webpack基础概念](./前端/Webpack/webpack-basic-info.md)
-    - [Loaders](./前端/Webpack/loaders.md)
-    - [文件监控和热加载](./前端/Webpack/file-watch-hotreload.md)
+    - [webpack基础概念](前端/Documents/Webpack/Webpack_Basic_Info.md)
+    - [Loaders](前端/Documents/Webpack/Loaders.md)
+    - [文件监控和热加载](前端/Documents/Webpack/File_Watch_Hotreload.md)
 
 #### Mac
 
-* [open 命令](./Mac/Documents/Open-Command.md)
+* [open 命令](./Mac/Documents/Open_Command.md)
 
 #### Linux
 
-* [lsof](./Linux/Documents/lsof.md)
+* [lsof](Linux/Documents/Lsof.md)
