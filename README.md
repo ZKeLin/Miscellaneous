@@ -29,7 +29,8 @@
     - [var,let,const](前端/Documents/js/Var_Let_Const_And_Hositing_Scope.md)
     - [How Event Loop works](前端/Documents/js/Event_Loop.md)
     - [Promise](前端/Documents/js/Ppromise.md)
-* 前端框架
+    - [原型链，new和继承](前端/Documents/js/原型链，new和继承.md)
+* 前端框架 
     - [实现一个小型的angular](./前端/Documents/框架工具相关/angular.md)
     - [React的Scheduler](./前端/Documents/框架工具相关/react/react的调度系统.md)
 * Webpack  
