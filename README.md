@@ -8,7 +8,6 @@
 * [回溯](./Algorithm/Documents/回溯)
 * [图](./Algorithm/Documents/图)
 * [堆栈链表](./Algorithm/Documents/堆-栈-链表)
-* [数组](./Algorithm/Documents/数组)
 
 #### 计算机网络
 
